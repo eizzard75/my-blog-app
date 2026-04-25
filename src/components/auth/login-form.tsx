@@ -29,7 +29,11 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      await signInWithEmail(email, password);
+      const credential = await signInWithEmail(email, password);
+      const idToken = await credential.user.getIdToken();
+      await fetch("/api/login", {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
       router.push("/dashboard");
     } catch (err) {
       const message =

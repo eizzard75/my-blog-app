@@ -47,6 +47,10 @@ export function SignupForm() {
     try {
       const credential = await signUpWithEmail(email, password);
       const user = credential.user;
+      const idToken = await user.getIdToken();
+      await fetch("/api/login", {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
 
       await createUserDoc(user.uid, {
         email: user.email ?? email,
