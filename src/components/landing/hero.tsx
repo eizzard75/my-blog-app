@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, LinkButton } from "@/components/ui/button";
 
 export function Hero() {
   return (
@@ -29,10 +28,10 @@ export function Hero() {
         </p>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button render={<Link href="/signup" />} size="lg" className="text-base px-8">
+          <LinkButton href="/signup" size="lg" className="text-base px-8">
             Start Free Trial
-          </Button>
-          <Button render={<a href="#how-it-works" />} variant="outline" size="lg" className="text-base px-8">
+          </LinkButton>
+          <Button nativeButton={false} render={<a href="#how-it-works" />} variant="outline" size="lg" className="text-base px-8">
             See How It Works
           </Button>
         </div>

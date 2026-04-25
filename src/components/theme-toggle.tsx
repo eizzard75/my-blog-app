@@ -10,27 +10,50 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { useEffect, useState } from "react";
+
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      console.debug("ThemeToggle", { theme, mounted });
+    }
+  }, [theme, mounted]);
+
+  const activeIcon = mounted ? (
+    theme === "light" ? (
+      <Sun className="h-5 w-5" />
+    ) : theme === "dark" ? (
+      <Moon className="h-5 w-5" />
+    ) : (
+      <Monitor className="h-5 w-5" />
+    )
+  ) : (
+    <Monitor className="h-5 w-5" />
+  );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="ghost" size="icon" />}>
-          {theme === "light" && <Sun className="h-5 w-5" />}
-          {theme === "dark" && <Moon className="h-5 w-5" />}
-          {(theme === "system" || !theme) && <Monitor className="h-5 w-5" />}
-          <span className="sr-only">Toggle theme</span>
+        {activeIcon}
+        <span className="sr-only">Toggle theme</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
+        <DropdownMenuItem onClick={() => setTheme("light")}> 
           <Sun className="mr-2 h-4 w-4" />
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem onClick={() => setTheme("dark")}> 
           <Moon className="mr-2 h-4 w-4" />
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        <DropdownMenuItem onClick={() => setTheme("system")}> 
           <Monitor className="mr-2 h-4 w-4" />
           System
         </DropdownMenuItem>

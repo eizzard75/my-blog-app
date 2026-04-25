@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { Check } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { createCheckoutSession } from "@/lib/stripe/checkout";
-import { Button } from "@/components/ui/button";
+import { Button, LinkButton } from "@/components/ui/button";
+
+console.debug("Pricing module loaded", { LinkButtonDefined: typeof LinkButton !== "undefined" });
 import {
   Card,
   CardContent,
@@ -33,6 +34,8 @@ const PRO_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID ?? "";
 
 export function Pricing() {
   const { user } = useAuth();
+
+  console.debug("Pricing component render", { user, LinkButtonDefined: typeof LinkButton !== "undefined" });
 
   async function handleSubscribe() {
     if (!user) return;
@@ -76,9 +79,9 @@ export function Pricing() {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button render={<Link href="/signup" />} variant="outline" className="w-full">
+              <LinkButton href="/signup" variant="outline" className="w-full">
                 Get Started
-              </Button>
+              </LinkButton>
             </CardFooter>
           </Card>
 
@@ -111,9 +114,9 @@ export function Pricing() {
                   Subscribe
                 </Button>
               ) : (
-                <Button render={<Link href="/signup" />} className="w-full">
+                <LinkButton href="/signup" className="w-full">
                   Sign Up to Subscribe
-                </Button>
+                </LinkButton>
               )}
             </CardFooter>
           </Card>

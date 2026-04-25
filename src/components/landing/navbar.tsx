@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
+import { Button, LinkButton } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -18,6 +18,10 @@ export function Navbar() {
   const { user, loading } = useAuth();
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    console.debug("Navbar auth", { loading, user });
+  }, [loading, user]);
+
   const navItems = (
     <>
       <a
@@ -29,17 +33,17 @@ export function Navbar() {
       {!loading && (
         <>
           {user ? (
-            <Button render={<Link href="/dashboard" />} size="sm">
+            <LinkButton href="/dashboard" size="sm">
               Dashboard
-            </Button>
+            </LinkButton>
           ) : (
             <>
-              <Button render={<Link href="/login" />} variant="ghost" size="sm">
+              <LinkButton href="/login" variant="ghost" size="sm">
                 Login
-              </Button>
-              <Button render={<Link href="/signup" />} size="sm">
+              </LinkButton>
+              <LinkButton href="/signup" size="sm">
                 Sign Up
-              </Button>
+              </LinkButton>
             </>
           )}
         </>
@@ -89,26 +93,26 @@ export function Navbar() {
                 <>
                   {user ? (
                     <SheetClose render={<span />}>
-                      <Button render={<Link href="/dashboard" />} className="w-full" size="sm">
+                      <LinkButton href="/dashboard" className="w-full" size="sm">
                         Dashboard
-                      </Button>
+                      </LinkButton>
                     </SheetClose>
                   ) : (
                     <>
                       <SheetClose render={<span />}>
-                        <Button
-                          render={<Link href="/login" />}
+                        <LinkButton
+                          href="/login"
                           variant="ghost"
                           className="w-full"
                           size="sm"
                         >
                           Login
-                        </Button>
+                        </LinkButton>
                       </SheetClose>
                       <SheetClose render={<span />}>
-                        <Button render={<Link href="/signup" />} className="w-full" size="sm">
+                        <LinkButton href="/signup" className="w-full" size="sm">
                           Sign Up
-                        </Button>
+                        </LinkButton>
                       </SheetClose>
                     </>
                   )}

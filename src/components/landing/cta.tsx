@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, LinkButton } from "@/components/ui/button";
 
 export function CTA() {
   return (
@@ -16,10 +15,10 @@ export function CTA() {
           faster than ever. Start for free — no credit card required.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button render={<Link href="/signup" />} size="lg" className="text-base px-8">
+          <LinkButton href="/signup" size="lg" className="text-base px-8">
             Start Free Trial
-          </Button>
-          <Button render={<a href="#pricing" />} variant="outline" size="lg" className="text-base px-8">
+          </LinkButton>
+          <Button nativeButton={false} render={<a href="#pricing" />} variant="outline" size="lg" className="text-base px-8">
             View Pricing
           </Button>
         </div>
