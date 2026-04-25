@@ -24,6 +24,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   const router = useRouter();
 
   async function handleSignOut() {
+    await fetch("/api/logout", { method: "POST" });
     await signOutUser();
     router.push("/");
   }

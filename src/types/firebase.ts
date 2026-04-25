@@ -22,6 +22,7 @@ export interface PostDoc {
   uid: string;
   title: string;
   content: string;
+  coverImage: string | null;
   status: "draft" | "published";
   createdAt: Date;
   updatedAt: Date;

@@ -11,12 +11,12 @@ export async function handleCheckoutCompleted(
     return;
   }
 
-  await getAdminDb().collection("users").doc(uid).update({
+  await getAdminDb().collection("users").doc(uid).set({
     stripeCustomerId: session.customer as string,
     subscriptionStatus: "active" as SubscriptionStatus,
     subscriptionPriceId: session.metadata?.priceId ?? null,
     updatedAt: new Date(),
-  });
+  }, { merge: true });
 }
 
 export async function handleSubscriptionUpdated(

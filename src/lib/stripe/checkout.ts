@@ -17,6 +17,7 @@ export async function createCheckoutSession(priceId: string, uid: string) {
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
     metadata: {
       uid,
+      priceId,
     },
   });
 

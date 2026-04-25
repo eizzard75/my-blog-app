@@ -5,6 +5,7 @@ import { authMiddleware } from "next-firebase-auth-edge/lib/next/middleware";
 const PUBLIC_PATHS = ["/", "/login", "/signup", "/terms", "/privacy"];
 
 function isPublicPath(pathname: string): boolean {
+  if (pathname.startsWith("/api/")) return true;
   return PUBLIC_PATHS.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`),
   );

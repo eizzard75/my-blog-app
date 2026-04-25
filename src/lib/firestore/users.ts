@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getFirebaseDb } from "@/lib/firebase/client";
 import type { UserDoc } from "@/types";
 
@@ -30,8 +30,5 @@ export async function updateUserDoc(
   data: Partial<UserDoc>,
 ): Promise<void> {
   const ref = doc(getFirebaseDb(), "users", uid);
-  await updateDoc(ref, {
-    ...data,
-    updatedAt: new Date(),
-  });
+  await setDoc(ref, { ...data, updatedAt: new Date() }, { merge: true });
 }

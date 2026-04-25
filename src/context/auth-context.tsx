@@ -12,6 +12,7 @@ import { getFirebaseAuth, isFirebaseConfigured } from "@/lib/firebase/client";
 export interface AuthContextValue {
   user: User | null;
   loading: boolean;
+  refreshUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(
@@ -37,8 +38,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return unsubscribe;
   }, []);
 
+  async function refreshUser() {
+    const current = getFirebaseAuth().currentUser;
+    if (current) {
+      await current.reload();
+      setUser({ ...getFirebaseAuth().currentUser! });
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

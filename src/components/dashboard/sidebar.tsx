@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, FileText, Settings, LogOut } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Home, FileText, Settings, CreditCard, LogOut } from "lucide-react";
 import { signOutUser } from "@/lib/firebase/auth";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,7 @@ import {
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/dashboard/posts", label: "My Posts", icon: FileText },
+  { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
@@ -26,6 +27,13 @@ interface SidebarProps {
 
 function SidebarContent() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleSignOut() {
+    await fetch("/api/logout", { method: "POST" });
+    await signOutUser();
+    router.push("/");
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -60,7 +68,7 @@ function SidebarContent() {
         <Button
           variant="ghost"
           className="w-full justify-start gap-3"
-          onClick={() => signOutUser()}
+          onClick={handleSignOut}
         >
           <LogOut className="h-4 w-4" />
           Sign Out

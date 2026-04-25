@@ -28,7 +28,7 @@ let _app: FirebaseApp | null = null;
 let _auth: Auth | null = null;
 let _db: Firestore | null = null;
 
-function getFirebaseApp(): FirebaseApp {
+export function getFirebaseApp(): FirebaseApp {
   if (!_app) {
     if (!isFirebaseConfigured()) {
       throw new Error("Firebase is not configured. Add env vars to .env.local");

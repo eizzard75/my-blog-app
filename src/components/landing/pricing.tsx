@@ -2,10 +2,7 @@
 
 import { Check } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { createCheckoutSession } from "@/lib/stripe/checkout";
 import { Button, LinkButton } from "@/components/ui/button";
-
-console.debug("Pricing module loaded", { LinkButtonDefined: typeof LinkButton !== "undefined" });
 import {
   Card,
   CardContent,
@@ -30,19 +27,14 @@ const PRO_FEATURES = [
   "Export to multiple formats",
 ];
 
-const PRO_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID ?? "";
-
 export function Pricing() {
   const { user } = useAuth();
 
-  console.debug("Pricing component render", { user, LinkButtonDefined: typeof LinkButton !== "undefined" });
-
   async function handleSubscribe() {
     if (!user) return;
-    const url = await createCheckoutSession(PRO_PRICE_ID, user.uid);
-    if (url) {
-      window.location.href = url;
-    }
+    const res = await fetch("/api/checkout", { method: "POST" });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
   }
 
   return (

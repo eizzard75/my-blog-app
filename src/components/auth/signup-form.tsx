@@ -47,20 +47,22 @@ export function SignupForm() {
     try {
       const credential = await signUpWithEmail(email, password);
       const user = credential.user;
-      const idToken = await user.getIdToken();
-      await fetch("/api/login", {
-        headers: { Authorization: `Bearer ${idToken}` },
-      });
 
       await createUserDoc(user.uid, {
         email: user.email ?? email,
         displayName: user.displayName ?? email.split("@")[0],
       });
 
-      await sendWelcomeEmail(
+      sendWelcomeEmail(
         user.email ?? email,
         user.displayName ?? email.split("@")[0],
-      );
+      ).catch(() => {/* non-critical — don't block signup */});
+
+      const idToken = await user.getIdToken();
+      await fetch("/api/login", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
 
       router.push("/dashboard");
     } catch (err) {
