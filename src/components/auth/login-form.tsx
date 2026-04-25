@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signInWithEmail } from "@/lib/firebase/auth";
 import {
@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const wantsPro = searchParams.get("plan") === "pro";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -36,6 +38,15 @@ export function LoginForm() {
         method: "POST",
         headers: { Authorization: `Bearer ${idToken}` },
       });
+
+      if (wantsPro) {
+        const checkoutRes = await fetch("/api/checkout", { method: "POST" });
+        const data = await checkoutRes.json();
+        if (data.url) {
+          window.location.href = data.url;
+          return;
+        }
+      }
 
       router.push("/dashboard");
     } catch (err) {
@@ -89,7 +100,7 @@ export function LoginForm() {
           </Button>
           <p className="text-sm text-muted-foreground text-center">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-primary underline">
+            <Link href={wantsPro ? "/signup?plan=pro" : "/signup"} className="text-primary underline">
               Sign up
             </Link>
           </p>

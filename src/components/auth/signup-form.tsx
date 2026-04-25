@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signUpWithEmail } from "@/lib/firebase/auth";
 import { createUserDoc } from "@/lib/firestore/users";
@@ -21,6 +21,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 export function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const wantsPro = searchParams.get("plan") === "pro";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -63,6 +65,15 @@ export function SignupForm() {
         method: "POST",
         headers: { Authorization: `Bearer ${idToken}` },
       });
+
+      if (wantsPro) {
+        const checkoutRes = await fetch("/api/checkout", { method: "POST" });
+        const data = await checkoutRes.json();
+        if (data.url) {
+          window.location.href = data.url;
+          return;
+        }
+      }
 
       router.push("/dashboard");
     } catch (err) {
@@ -146,7 +157,7 @@ export function SignupForm() {
           </Button>
           <p className="text-sm text-muted-foreground text-center">
             Already have an account?{" "}
-            <Link href="/login" className="text-primary underline">
+            <Link href={wantsPro ? "/login?plan=pro" : "/login"} className="text-primary underline">
               Log in
             </Link>
           </p>

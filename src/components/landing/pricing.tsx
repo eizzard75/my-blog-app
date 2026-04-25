@@ -106,7 +106,7 @@ export function Pricing() {
                   Subscribe
                 </Button>
               ) : (
-                <LinkButton href="/signup" className="w-full">
+                <LinkButton href="/signup?plan=pro" className="w-full">
                   Sign Up to Subscribe
                 </LinkButton>
               )}
