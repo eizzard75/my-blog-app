@@ -13,6 +13,8 @@ export interface UserDoc {
   stripeCustomerId: string | null;
   subscriptionStatus: SubscriptionStatus;
   subscriptionPriceId: string | null;
+  cancelAtPeriodEnd?: boolean;
+  currentPeriodEnd?: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -36,8 +36,11 @@ export async function handleSubscriptionUpdated(
   }
 
   const userDoc = usersSnapshot.docs[0];
+  const periodEnd = subscription.items.data[0]?.current_period_end;
   await userDoc.ref.update({
     subscriptionStatus: subscription.status as SubscriptionStatus,
+    cancelAtPeriodEnd: subscription.cancel_at_period_end,
+    currentPeriodEnd: periodEnd ? new Date(periodEnd * 1000) : null,
     updatedAt: new Date(),
   });
 }
@@ -61,6 +64,8 @@ export async function handleSubscriptionDeleted(
   const userDoc = usersSnapshot.docs[0];
   await userDoc.ref.update({
     subscriptionStatus: "inactive" as SubscriptionStatus,
+    cancelAtPeriodEnd: false,
+    currentPeriodEnd: null,
     updatedAt: new Date(),
   });
 }

@@ -22,7 +22,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Cancel at period end so user keeps access until billing cycle ends
-    await stripe.subscriptions.update(subscriptions.data[0].id, { cancel_at_period_end: true });
+    const updated = await stripe.subscriptions.update(subscriptions.data[0].id, { cancel_at_period_end: true });
+
+    // Mirror the cancellation in Firestore immediately — don't wait for the webhook
+    const periodEnd = updated.items.data[0]?.current_period_end;
+    await getAdminDb().collection("users").doc(uid).update({
+      cancelAtPeriodEnd: true,
+      currentPeriodEnd: periodEnd ? new Date(periodEnd * 1000) : null,
+      updatedAt: new Date(),
+    });
 
     return NextResponse.json({ success: true });
   } catch (err) {
