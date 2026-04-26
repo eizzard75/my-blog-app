@@ -36,6 +36,19 @@ export default function BillingPage() {
     });
   }, [user]);
 
+  // Reset transient loading state if the user navigates back from Stripe via bfcache.
+  useEffect(() => {
+    function onShow(e: PageTransitionEvent) {
+      if (e.persisted) {
+        setLoading(false);
+        setCancelling(false);
+        setError(null);
+      }
+    }
+    window.addEventListener("pageshow", onShow);
+    return () => window.removeEventListener("pageshow", onShow);
+  }, []);
+
   const isPro = subscriptionStatus === "active" || subscriptionStatus === "trialing";
 
   async function handleCancel() {
