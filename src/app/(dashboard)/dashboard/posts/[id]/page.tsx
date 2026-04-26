@@ -35,16 +35,20 @@ export default function EditPostPage() {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    getPost(id).then((p) => {
-      if (p) {
-        setPost(p);
-        setTitle(p.title);
-        setContent(p.content);
-        setStatus(p.status);
-        setCoverImage(p.coverImage ?? null);
-      }
-      setLoading(false);
-    });
+    getPost(id)
+      .then((p) => {
+        if (p) {
+          setPost(p);
+          setTitle(p.title);
+          setContent(p.content);
+          setStatus(p.status);
+          setCoverImage(p.coverImage ?? null);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load post:", err);
+      })
+      .finally(() => setLoading(false));
   }, [id]);
 
   async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
